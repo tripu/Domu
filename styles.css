@@ -1,0 +1,98 @@
+
+/**
+ * File “styles.css” — CSS for the Dōmu Sandbox page.
+ * Project Dōmu (“DOM Utilities”) — https://github.com/tripu/Domu
+ * Copyright © 2013 tripu <tripu@tripu.info> http://tripu.info
+ * Released under the terms of the GPL.
+ */
+
+/************************************** General stuff */
+
+* {
+	-moz-box-sizing:		border-box;
+	-webkit-box-sizing:		border-box;
+	box-sizing:				border-box;
+}
+
+body {
+	background-color:		white;
+	color:					black;
+	font-family:			sans-serif;
+	margin:					20px auto;
+	max-width:				960px;
+}
+
+/************************************** Sectioning and layout */
+
+article {
+	margin:					0;
+	padding:				0;
+}
+
+aside {
+	background-color:		#f0f0f0;
+	border-radius:			8px;
+	float:					right;
+	margin:					0 0 0 20px;
+	padding:				20px;
+	width:					25%;
+}
+
+/************************************** Block–level elements */
+
+h1 {
+	text-align:				center;
+}
+
+p#intro {
+	font-size:				larger;
+	font-style:				italic;
+	color:					#808080;
+}
+
+ul {
+	padding:				0;
+}
+
+li {
+	list-style:				none;
+}
+
+figure {
+	margin:					0;
+}
+
+figure img {
+	-moz-box-shadow:		0px 0px 20px rgba(50, 50, 50, 0.25);
+	-webkit-box-shadow:		0px 0px 20px rgba(50, 50, 50, 0.25);
+	box-shadow:				0px 0px 20px rgba(50, 50, 50, 0.25);
+	height:					225px;
+	width:					150px;
+}
+
+hr {
+	margin:					20px 0;
+}
+
+div#menu {
+	/*font-size:				larger;*/
+	/*font-family:			sans-serif;*/
+}
+
+div#info textarea {
+	font-family:			monospace;
+	font-size:				larger;
+	width:					90%;
+	height:					90%;
+}
+
+/************************************** Inline elements */
+
+abbr {
+	border-color:			black;
+	border-style:			dashed;
+	border-width:			0 0 1px 0;
+}
+
+/* EOF */
+
