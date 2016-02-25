@@ -50,7 +50,7 @@ h1 small { font:normal 13px/1.2em Arial, Helvetica, sans-serif; color:#888; lett
 .left { float:left; width:614px; margin:0; padding:0 25px; background:url(images/l_bg.gif) top center no-repeat;}
 .right { float:right; width:255px; margin:0; padding:0 25px; background:url(images/r_bg.gif) top center no-repeat;}
 .right ul { list-style:none; margin:5px 0; padding:0;}
-.right li {  background: url(images/ul_li.gif) 10px 10px no-repeat; font: normal 14px Arial, Helvetica, sans-serif; color:#464646; padding:5px 0; margin:3px 0;}
+.right li {  font: normal 14px Arial, Helvetica, sans-serif; color:#464646; padding:5px 0; margin:3px 0;}
 .right li a {  padding:0 0 0 5px; margin:0; font: bold 17px Arial, Helvetica, sans-serif; color:#97c950; text-decoration:none;}
 .right li a:hover { color:#5f5f5f; text-decoration:none; }
 .right ul.sponsors { list-style:none; margin:5px 0; padding:0;}
@@ -65,7 +65,7 @@ h1 small { font:normal 13px/1.2em Arial, Helvetica, sans-serif; color:#888; lett
 .FBG p { font: normal 12px Arial, Helvetica, sans-serif; color:#5f5f5f; padding:5px; margin:0; line-height:1.8em;}
 .FBG a { color:#97c950; text-decoration:underline;}
 .FBG ul { list-style:none; margin:5px 0; padding:0;}
-.FBG li {  background: url(images/ul_li.gif) 10px 10px no-repeat; font: normal 14px Arial, Helvetica, sans-serif; color:#464646; padding:5px 0; margin:3px 0;}
+.FBG li {  font: normal 14px Arial, Helvetica, sans-serif; color:#464646; padding:5px 0; margin:3px 0;}
 .FBG li a {  padding:0 0 0 5px; margin:0; font: normal 13px Arial, Helvetica, sans-serif; color:#5f5f5f; text-decoration:none;}
 .FBG li a:hover { color:#97c950; text-decoration:none; }
 .FBG .blok { width:280px; float:left; padding:10px 20px; margin:0;}
