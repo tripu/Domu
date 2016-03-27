@@ -4,7 +4,7 @@ Released for free under a Creative Commons Attribution 3.0 License
 */
 
 @charset "utf-8";
-body { margin:2rem 0 0 0; padding:0; width:100%;  background:#fcf6ee; }
+body { margin:0; padding:0; width:100%;  background:#fcf6ee; }
 html { padding:0; margin:0;}
 li.bg, .bg { clear:both; border-bottom:1px dashed #818181; padding:0; margin:10px 0; background:none; list-style:none;}
 p.clr, .clr { clear:both; padding:0; margin:0;}
@@ -87,61 +87,93 @@ h1 small { font:normal 13px/1.2em Arial, Helvetica, sans-serif; color:#888; lett
 #contactform li.buttons input { border:1px solid #000; background:#ea7d1b; padding:10px; margin:10px 0 0 0px;  color:#fff; float:left; font: normal 12px Arial, Helvetica, sans-serif;}
 p.response { text-align:center; color:#F00; font: normal 11px Georgia, "Times New Roman", Times, serif; line-height:1.8em; width:auto; }
 
+body.padded {
+    margin: 2rem 0 0 0;
+}
+
 body.td {
-  transform-origin: 50% 50%;
-  transform-style: flat; /* preserve-3d; */
-  perspective: 1200px;
+    transform-origin: 50% 50%;
+    transform-style: preserve-3d; /* flat; */
+    perspective: 1200px;
 }
 
 section#overlay {
-  position: fixed;
-  z-index: 10000;
-  top: 0;
-  left: 0;
-  right: 0;
-  margin: 0;
-  border-width: 0 0 .1rem 0;
-  border-style: solid;
-  border-color: rgba(0, 0, 0, .6);
-  padding: 1rem 4rem;
-  background-color: rgba(255, 255, 192, .8);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, .6);
-  font-size: larger;
-  font-family: sans-serif;
-  text-align: center;
+    position: fixed;
+    z-index: 10000;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: 0;
+    border-width: 0 0 .1rem 0;
+    border-style: solid;
+    border-color: rgba(0, 0, 0, .6);
+    padding: 1rem 4rem;
+    background-color: rgba(255, 255, 192, .8);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, .6);
+    font-size: larger;
+    font-family: sans-serif;
+    text-align: center;
+}
+
+section#overlay.hidden {
+    display: none;
 }
 
 section#overlay a.action {
-  margin: 0 .2rem;
-  border-width: .1rem;
-  border-style: solid;
-  border-color: rgba(0, 0, 0, .8);
-  padding: .1rem .2rem;
-  text-decoration: none;
-  background-color: white;
+    margin: 0 .2rem;
+    border-width: .1rem;
+    border-style: solid;
+    border-color: rgba(0, 0, 0, .8);
+    padding: .1rem .2rem;
+    text-decoration: none;
+    background-color: white;
 }
 
 section#overlay a.action:hover,
 section#overlay a.action:active,
 section#overlay a.action:focus {
-  margin: 0 .2rem;
-  border-width: .15rem;
-  border-style: solid;
-  border-color: rgba(0, 0, 0, .8);
-  padding: .05rem .15rem;
-  text-decoration: none;
-  background-color: white;
+    margin: 0 .2rem;
+    border-width: .15rem;
+    border-style: solid;
+    border-color: rgba(0, 0, 0, .8);
+    padding: .05rem .15rem;
+    text-decoration: none;
+    background-color: white;
 }
 
 div.helper {
-  position: absolute;
-  z-index: 1000;
-  background-color: rgba(128, 128, 128, 0.333);
-  margin: 0;
-  border: 0;
-  padding: 0;
-  transition: all 0.333s linear;
-  transform-style: preserve-3d;
-  transform-origin: center;
-/*  transform: rotateY(30deg); */
+    position: absolute;
+    z-index: 1000;
+    background-color: rgba(128, 128, 128, 0.333);
+    margin: 0;
+    border: 0;
+    padding: 0;
+    transition: all 0.333s linear;
+    transform-style: preserve-3d;
+    transform-origin: center;
+    transform: rotateY(10deg);
+}
+
+section#ticker {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 16rem;
+    height: 8rem;
+    font-size: 4rem;
+    font-family: sans-serif;
+    font-weight: bold;
+    background-color: rgba(0, 0, 0, .5);
+    color: white;
+    line-height: 8rem;
+    text-align: center;
+    transition: font-size .5s linear;
+}
+
+.padded {
+    /*transition: position .5s linear;*/
+}
+
+.padded, .padded > * {
+    cursor: crosshair !important;
 }

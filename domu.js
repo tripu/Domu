@@ -1,79 +1,79 @@
 'use strict';
 
-const LOG_INDENTATION = '    ';
+const SELF = 'dōmu',
+    LOG_INDENTATION = '·   ';
 
-function printNode(node, depth, partialResult) {
+/**
+ * Return a simple text representation of a node.
+ *
+ * @param {} node
+ * @param {Number} depth
+ * @param {String} partialResult
+ * @returns {String}
+ */
 
-  var result;
+const printNode = function(node, depth, partialResult) {
 
-  if (undefined !== node && undefined !== depth) {
-    result = partialResult +
-      new Array(depth + 1).join(LOG_INDENTATION) +
-      '<' + node.prop('tagName').toLowerCase() + (node.attr('id') ? (' id="' + node.attr('id') + '"') : '') + '>\n';
-  } else {
-    console.log('node=' + node + '; depth=' + depth + '!');
-  }
+    if (undefined === node || undefined === depth)
+        throw new Error(SELF + ': printNode misses some arguments.');
 
-  return result;
+    return partialResult +
+        new Array(depth + 1).join(LOG_INDENTATION) +
+        '<' + node.prop('tagName').toLowerCase() + (node.attr('id') ? (' id="' + node.attr('id') + '"') : '') + '>\n';
 
 };
 
-function traverseDOM(task, partialResult, ignore, rootNode, preOrder, depth) {
+const OPTS_DEFAULT = {
+    task: printNode,
+    partialResult: '',
+    ignore: undefined,
+    rootNode: 'body',
+    depth: 0
+};
 
-  var result;
+/**
+ * Traverse the DOM tree and perform some action in each of its nodes.
+ *
+ * @param {Function} $ - the jQuery object.
+ * @param {Object} options -.
+ * @returns {*}
+ */
 
-  if (undefined === task) {
-    task = printNode;
-  }
+const traverseDOM = function($, options) {
 
-  if (undefined === partialResult) {
-    partialResult = '';
-  }
+    var opts = {},
+        children;
 
-  if (undefined !== ignore && !/^:not/.test(ignore)) {
-    ignore = ':not(' + ignore + ')';
-  }
+    if ('function' !== typeof $)
+        throw new Error(SELF + ': missing/wrong jQuery object.');
 
-  if (undefined === rootNode) {
-    rootNode = $('body');
-  }
+    for (var o of Object.keys(OPTS_DEFAULT))
+        opts[o] = (undefined === options[o] ? OPTS_DEFAULT[o] : options[o]);
 
-  if (undefined === preOrder) {
-    preOrder = true;
-  }
+    if ('string' === typeof opts.rootNode)
+        opts.rootNode = $(opts.rootNode);
 
-  if (undefined === depth || depth < 0) {
-    depth = 0;
-  }
+    if (undefined !== opts.ignore && !/^:not/.test(opts.ignore))
+        opts.ignore = ':not(' + opts.ignore + ')';
 
-  if (preOrder) {
+    children = opts.rootNode.children(opts.ignore);
+    opts.partialResult = opts.task.call(null, opts.rootNode, opts.depth, opts.partialResult);
 
-    if (rootNode.prop('tagName').toLowerCase() != 'body') {
-      result = task.call(null, rootNode, depth, partialResult);
-    }
+    for (var i = 0; i < children.length; i++)
+        opts.partialResult = traverseDOM($, {
+            task: opts.task,
+            ignore: opts.ignore,
+            rootNode: $(children[i]),
+            depth: opts.depth + 1,
+            partialResult: opts.partialResult
+        });
 
-    for (var i = 0; i < rootNode.children(ignore).length; i++) {
-      result = traverseDOM(task, result, ignore, $(rootNode.children(ignore)[i]), preOrder, depth + 1);
-    }
-
-  } else {
-
-    for (var i = 0; i < rootNode.children(ignore).length; i++) {
-      result = traverseDOM(task, partialResult, ignore, $(rootNode.children(ignore)[i]), preOrder, depth + 1);
-    }
-
-    if (rootNode.prop('tagName').toLowerCase() != 'body') {
-      result = task.call(null, rootNode, depth, result);
-    }
-
-  }
-
-  return result;
+    return opts.partialResult;
 
 };
 
 // CommonJS:
-var exports = {traverseDOM: traverseDOM};
+const exports = {traverseDOM: traverseDOM};
 
 // AMD:
 if ('function' === typeof define) {
