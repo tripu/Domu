@@ -1,6 +1,6 @@
 # D&#333;mu (&ldquo;DOM Utilities&rdquo;)
 
-JavaScript library for [DOM](https://en.wikipedia.org/wiki/Document_Object_Model "Document Object Model") traversing and manipulation, built on top of
+JavaScript library for [DOM](https://en.wikipedia.org/wiki/Document_Object_Model "Document Object Model") traversing and manipulation built with
 [jQuery](https://jquery.com/).
 
 ## Credits

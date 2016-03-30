@@ -92,9 +92,9 @@ body.padded {
 }
 
 body.td {
-    transform-origin: 50% 50%;
-    transform-style: preserve-3d; /* flat; */
-    perspective: 1200px;
+    /*transform-origin: 50% 50%;
+    transform-style: preserve-3d;
+    perspective: 1200px;*/
 }
 
 section#overlay {
@@ -170,10 +170,22 @@ section#ticker {
     transition: font-size .5s linear;
 }
 
-.padded {
+.padded > * {
+    /*transform-style: preserve-3d;
+    transform-origin: center;*/
     /*transition: position .5s linear;*/
 }
 
-.padded, .padded > * {
+.padded > .target {
+    background-color: black;
     cursor: crosshair !important;
+    filter: hue-rotate(120deg) saturate(10);
+    -webkit-filter: hue-rotate(120deg) saturate(10);
+    transition: size .2s linear;
+}
+
+.padded > .target:hover {
+    filter: hue-rotate(240deg) saturate(20);
+    -webkit-filter: hue-rotate(240deg) saturate(20);
+    transform: scale(2);
 }

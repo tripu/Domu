@@ -1,8 +1,12 @@
 'use strict';
 
-const IGNORE_NODES = '.helper, section#overlay, section#ticker, script, object',
-  MIN_DEPTH = 1,
-  MAX_DEPTH = Infinity;
+const IGNORE_NODES = '.helper, section#overlay, section#ticker, script, object, iframe',
+    MIN_DEPTH = 2,
+    MAX_DEPTH = Infinity,
+    TARGET_RATIO = 0.1,
+    FIELD_AFFORDANCE = 0.3, // 0.5,
+    FIELD_NEUTER = 0.01,
+    MAX_PUSH = 0.1; // 0.2;
 
 /**
  * Define a generic event handler that triggers some given action and then cancels the event altogether.
@@ -47,22 +51,28 @@ const setUp = function($, domu) {
     };
 
     const reactToMouseOver = function(event) {
-        // console.log(event);
         const X = event.pageX,
-            Y = event.pageY;
+            Y = event.pageY,
+            AFF = arena * FIELD_AFFORDANCE;
         var vx, vy, d;
         for (var a of anchors) {
             vx = a.x - X;
             vy = a.y - Y;
             d = Math.sqrt(vx * vx + vy * vy);
-            if (d > /* a.r */ arena * 0.5) {
+            if (d > arena * FIELD_AFFORDANCE) {
                 a.n.css('transform', 'none');
-            } else if (d > arena * 0.01) {
+            } else if (d > arena * FIELD_NEUTER) {
                 var nx = vx / d,
                     ny = vy / d,
-                    push = (Math.cos((arena * 0.5 - d) / (arena * 0.5) * Math.PI + Math.PI) + 1) * arena * 0.075;
-                // push = (arena * 0.5 - d) * 0.3; // / a.w;
+                    push = (Math.cos((AFF - d) / AFF * Math.PI + Math.PI) * 0.5 + 0.5) * arena * MAX_PUSH,
+                    h = d / AFF * 200,
+                    deg = (AFF - d) / AFF * -60;
+                    // push = (arena * 0.5 - d) * 0.3; // / a.w;
                 a.n.css('transform', 'translate(' + (nx * push) + 'px, ' + (ny * push) + 'px)');
+                // a.n.css('transform', 'translate(' + (nx * push) + 'px, ' + (ny * push) + 'px, ' + h + 'px)');
+                // a.n.css('transform', 'translate(' + (nx * push) + 'px, ' + (ny * push) + 'px) ' +
+                //     'rotate3d(' + ny + ', ' + nx + ', 0, ' + deg + 'deg)');
+                // a.n.css('transform', 'rotate3d(' + ny + ', ' + nx + ', 0, ' + deg + 'deg)');
             }
         }
     };
@@ -71,11 +81,12 @@ const setUp = function($, domu) {
         $(this).fadeOut({done: function() { $(this).remove(); }});
         target--;
         ticker.text(target);
+        // if (target < 1)
+            window.location = 'https://heavyeditorial.files.wordpress.com/2015/03/qjrcnqc.jpg';
     };
 
     const recordProperties = function(node, depth) {
         if (depth >= MIN_DEPTH && depth <= MAX_DEPTH) {
-            // console.dir(node);
             const n = node[0],
                 comp = window.getComputedStyle(n, null);
             node.attr('data-tmp-style', JSON.stringify({
@@ -97,15 +108,12 @@ const setUp = function($, domu) {
                 backgroundColor: comp.getPropertyValue('background-color'), // n.style.backgroundColor,
                 // border: '1px solid black'
             }));
-            // console.dir(n);
-            // console.log(node.attr('data-tmp-style'));
+            // node.attr('data-tmp-style', JSON.stringify(comp));
         }
     };
 
     const createHelper = function(node) {
-        // console.dir(node[0]);
         var n = node[0];
-        // console.log(n.offsetTop + ', ' + n.offsetLeft);
         helpers.push('<div class="helper" style="left:' + n.offsetLeft + 'px; top:' + n.offsetTop +
             'px; width:' + n.offsetWidth + 'px; height:' + n.offsetHeight + 'px;">'
             + node.prop('tagName') + '</div>');
@@ -113,24 +121,28 @@ const setUp = function($, domu) {
 
     const detach = function(node, depth) {
         if (depth >= MIN_DEPTH && depth <= MAX_DEPTH) {
-            // console.dir(node);
+            const n = node[0],
+                weight = Math.min((n.offsetWidth * n.offsetHeight) / (arena * arena), 1);
             body.append(node);
             node.css(JSON.parse(node.attr('data-tmp-style')));
             node.removeAttr('data-tmp-style');
-            target++;
-            const n = node[0];
-            anchors.push({
-                n: node,
-                x: n.offsetLeft + 0.5 * n.offsetWidth,
-                y: n.offsetTop + 0.5 * n.offsetHeight,
-                // l: Math.max(n.offsetWidth, n.offsetHeight)
-                w: Math.min((n.offsetWidth * n.offsetHeight) / (arena * arena), 1)
-            });
+            if (Math.random() < TARGET_RATIO && n.offsetWidth > 50 && n.offsetHeight > 50) { // && weight >= 0.2) {
+                node.addClass('target');
+                target++;
+            } else {
+                anchors.push({
+                    n: node,
+                    x: n.offsetLeft + 0.5 * n.offsetWidth,
+                    y: n.offsetTop + 0.5 * n.offsetHeight,
+                    // l: Math.max(n.offsetWidth, n.offsetHeight)
+                    w: weight
+                });
+            }
         }
     };
 
     const traceDOM = function() {
-        const trace = domu.traverseDOM($, {ignore: IGNORE_NODES});
+      const trace = domu.traverseDOM($, {ignore: IGNORE_NODES});
         console.debug(trace);
         window.alert('Check out the JavaScript console.');
     };
@@ -147,12 +159,17 @@ const setUp = function($, domu) {
     const gamify = function() {
         anchors = [];
         arena = Math.min(document.documentElement.clientWidth, document.documentElement.clientHeight);
-        // console.log(arena);
         domu.traverseDOM($, {task: recordProperties, ignore: IGNORE_NODES});
         domu.traverseDOM($, {task: detach, ignore: IGNORE_NODES});
         createTicker();
-        $('body > :not(' + IGNORE_NODES + ')').click(buildHandler(reactToMouseClick));
+        // $(':not(' + IGNORE_NODES + ')').click(buildHandler(reactToMouseClick));
+        $('.target').click(buildHandler(reactToMouseClick));
         $(document).mousemove(buildHandler(reactToMouseOver))
+        // $(body).css({
+        //     'transform-origin': '50% 50%',
+        //     'transform-style': 'preserve-3d',
+        //     'perspective': (arena * 2) + 'px'
+        // });
     };
 
     const init = function() {
